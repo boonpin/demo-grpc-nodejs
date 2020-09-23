@@ -1,9 +1,19 @@
 const grpc = require('grpc');
 const protoPackage = require('./package');
+const jwt = require('jsonwebtoken');
 
 function establish(call) {
-    // callback(null, {message: 'Hello again, ' + call.request.name});
-    console.log(call);
+    let user = null;
+    try {
+        const token = call.metadata.get('authorization')[0];
+        user = jwt.verify(token, `my-secret-1234`);
+    } catch (e) {
+        call.write({action: `Unauthorized!`});
+        call.end();
+        return;
+    }
+
+    console.log(`welcome ${user.hostname}`);
 
     let num = 1;
     let interval = setInterval(() => {
@@ -13,8 +23,8 @@ function establish(call) {
     call.on('data', (d) => {
         console.log(d);
     });
-    call.on('cancelled', (d) => {
-        console.log(`${call.request.name} - disconnected`);
+    call.on('cancelled', () => {
+        console.log(`${user.hostname} disconnected`);
         clearInterval(interval);
         call.end();
     });

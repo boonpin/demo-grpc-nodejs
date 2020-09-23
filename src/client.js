@@ -1,6 +1,7 @@
 const grpc = require('grpc');
 const protoPackage = require('./package');
 const os = require('os');
+const jwt = require('jsonwebtoken');
 
 function heartbeat() {
     return {
@@ -17,20 +18,28 @@ function heartbeat() {
 
 function main() {
     const client = new protoPackage.heartbeat.HeartbeatService('localhost:50051', grpc.credentials.createInsecure());
+    const meta = new grpc.Metadata();
+    meta.add('Authorization', jwt.sign({
+        hostname: os.hostname()
+    }, 'my-secret-1234', {expiresIn: `5m`}));
 
-    const connection = client.Establish(heartbeat());
+
+    const connection = client.Establish(meta);
 
     const interval = setInterval(() => {
-        connection.write(heartbeat())
+        connection.write(heartbeat(), meta)
     }, 2500)
+
+    const stop = (msg) => () => {
+        console.log(msg);
+        clearInterval(interval);
+    };
 
     connection.on('data', function (d) {
         console.log(d);
     });
-    connection.on('cancelled', () => {
-        console.log('cancelled')
-        clearInterval(interval);
-    });
+    connection.on('end', stop('end'));
+    connection.on('cancelled', stop('cancelled'));
 }
 
 
