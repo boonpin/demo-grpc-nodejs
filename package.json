@@ -1,0 +1,23 @@
+{
+  "name": "demo-grpc-nodejs",
+  "version": "1.0.0",
+  "description": "Demo gRPC Client and Server with nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boonpin/demo-grpc-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boonpin/demo-grpc-nodejs/issues"
+  },
+  "homepage": "https://github.com/boonpin/demo-grpc-nodejs#readme",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.5",
+    "grpc": "^1.24.3"
+  }
+}
