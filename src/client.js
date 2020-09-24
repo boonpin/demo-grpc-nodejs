@@ -28,7 +28,7 @@ function main() {
 }
 
 function runHeartbeat(meta) {
-    const client = new protoPackage.heartbeat.HeartbeatService('localhost:80', grpc.credentials.createInsecure());
+    const client = new protoPackage.heartbeat.HeartbeatService('localhost:50051', grpc.credentials.createInsecure());
     const connection = client.Establish(meta);
     const interval = setInterval(() => {
         connection.write(heartbeat())
@@ -45,7 +45,7 @@ function runHeartbeat(meta) {
 }
 
 function runCommand(meta) {
-    const client = new protoPackage.command.CommandService('localhost:80', grpc.credentials.createInsecure());
+    const client = new protoPackage.command.CommandService('localhost:50051', grpc.credentials.createInsecure());
     const connection = client.Establish(meta);
     connection.on('data', function (request) {
         const {uid, action, data} = request;
