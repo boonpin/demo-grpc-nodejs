@@ -9,11 +9,11 @@ service HeartbeatService {
 message Heartbeat {
   string hostname = 1;
   int64 time = 2;
-  int32 uptime = 3;
-  int32 mem_free = 4;
-  int32 mem_total = 5;
-  int32 storage_free = 6;
-  int32 storage_used = 7;
+  int64 uptime = 3;
+  int64 mem_free = 4;
+  int64 mem_total = 5;
+  int64 storage_free = 6;
+  int64 storage_used = 7;
   int32 cpu_usage = 8;
 }
 
